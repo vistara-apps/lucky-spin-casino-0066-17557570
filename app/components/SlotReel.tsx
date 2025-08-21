@@ -1,4 +1,3 @@
-
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -8,10 +7,12 @@ interface SlotReelProps {
   symbol: string
   isSpinning: boolean
   delay?: number
+  index?: number
 }
 
-export function SlotReel({ symbol, isSpinning, delay = 0 }: SlotReelProps) {
+export function SlotReel({ symbol, isSpinning, delay = 0, index = 0 }: SlotReelProps) {
   const [displaySymbol, setDisplaySymbol] = useState(symbol)
+  const reelPosition = index + 1
 
   useEffect(() => {
     if (isSpinning) {
@@ -33,9 +34,24 @@ export function SlotReel({ symbol, isSpinning, delay = 0 }: SlotReelProps) {
     }
   }, [isSpinning, symbol, delay])
 
+  // Get symbol name for accessibility
+  const getSymbolName = (symbol: string) => {
+    const symbolNames: Record<string, string> = {
+      '🍒': 'Cherry',
+      '🍋': 'Lemon',
+      '🍊': 'Orange',
+      '🍇': 'Grapes',
+      '🔔': 'Bell',
+      '💎': 'Diamond',
+      '7️⃣': 'Seven',
+      '⭐': 'Star'
+    }
+    return symbolNames[symbol] || symbol
+  }
+
   return (
     <motion.div
-      className="slot-reel"
+      className="slot-reel w-1/3 sm:w-auto"
       animate={isSpinning ? { 
         y: [0, -20, 0],
         scale: [1, 1.05, 1]
@@ -45,13 +61,16 @@ export function SlotReel({ symbol, isSpinning, delay = 0 }: SlotReelProps) {
         repeat: isSpinning ? Infinity : 0,
         ease: 'linear'
       }}
+      aria-label={`Reel ${reelPosition}: ${isSpinning ? 'Spinning' : getSymbolName(displaySymbol)}`}
+      role="img"
     >
       <motion.span
         key={displaySymbol}
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.2 }}
-        className="text-4xl"
+        className="text-3xl sm:text-4xl"
+        aria-hidden="true"
       >
         {displaySymbol}
       </motion.span>

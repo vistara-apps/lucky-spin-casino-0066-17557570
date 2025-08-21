@@ -5,15 +5,40 @@ module.exports = {
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        primary: 'hsl(35, 77%, 61%)',
-        accent: 'hsl(210, 90%, 50%)',
-        bg: 'hsl(220, 24%, 14%)',
-        surface: 'hsl(220, 24%, 18%)',
-        text: 'hsl(0, 0%, 95%)',
-        muted: 'hsl(0, 0%, 70%)',
+        primary: {
+          DEFAULT: 'hsl(35, 77%, 61%)',
+          light: 'hsl(35, 77%, 55%)',
+          dark: 'hsl(35, 77%, 61%)',
+        },
+        accent: {
+          DEFAULT: 'hsl(210, 90%, 50%)',
+          light: 'hsl(210, 90%, 45%)',
+          dark: 'hsl(210, 90%, 50%)',
+        },
+        bg: {
+          DEFAULT: 'hsl(220, 24%, 14%)',
+          light: 'hsl(220, 24%, 95%)',
+          dark: 'hsl(220, 24%, 14%)',
+        },
+        surface: {
+          DEFAULT: 'hsl(220, 24%, 18%)',
+          light: 'hsl(220, 24%, 90%)',
+          dark: 'hsl(220, 24%, 18%)',
+        },
+        text: {
+          DEFAULT: 'hsl(0, 0%, 95%)',
+          light: 'hsl(0, 0%, 15%)',
+          dark: 'hsl(0, 0%, 95%)',
+        },
+        muted: {
+          DEFAULT: 'hsl(0, 0%, 70%)',
+          light: 'hsl(0, 0%, 40%)',
+          dark: 'hsl(0, 0%, 70%)',
+        },
       },
       spacing: {
         sm: '8px',
