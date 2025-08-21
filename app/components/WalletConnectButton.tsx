@@ -1,4 +1,3 @@
-
 'use client'
 
 import { 
@@ -22,7 +21,10 @@ interface WalletConnectButtonProps {
 export function WalletConnectButton({ onConnect }: WalletConnectButtonProps) {
   return (
     <Wallet className="w-full">
-      <ConnectWallet className="btn-primary w-full">
+      <ConnectWallet 
+        className="btn-primary w-full py-3 sm:py-4 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50"
+        aria-label="Connect your wallet to play"
+      >
         <Name className="text-inherit" />
       </ConnectWallet>
       <WalletDropdown>

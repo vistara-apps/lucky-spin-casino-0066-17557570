@@ -1,4 +1,3 @@
-
 'use client'
 
 import { motion } from 'framer-motion'
@@ -24,25 +23,25 @@ export function GameStats({ balance, recentBets }: GameStatsProps) {
     >
       <h3 className="text-lg font-bold text-primary">Game Stats</h3>
       
-      <div className="grid grid-cols-2 gap-4 text-sm">
+      <div className="grid grid-cols-2 gap-4 text-xs sm:text-sm" aria-label="Game statistics">
         <div className="text-center">
-          <p className="text-muted">Balance</p>
-          <p className="text-xl font-bold text-primary">{balance}</p>
+          <p className="text-muted" id="balance-label">Balance</p>
+          <p className="text-lg sm:text-xl font-bold text-primary" aria-labelledby="balance-label">{balance}</p>
         </div>
         
         <div className="text-center">
-          <p className="text-muted">Win Rate</p>
-          <p className="text-xl font-bold">{winRate}%</p>
+          <p className="text-muted" id="win-rate-label">Win Rate</p>
+          <p className="text-lg sm:text-xl font-bold" aria-labelledby="win-rate-label">{winRate}%</p>
         </div>
         
         <div className="text-center">
-          <p className="text-muted">Total Wagered</p>
-          <p className="font-semibold">{totalWagered}</p>
+          <p className="text-muted" id="wagered-label">Total Wagered</p>
+          <p className="font-semibold" aria-labelledby="wagered-label">{totalWagered}</p>
         </div>
         
         <div className="text-center">
-          <p className="text-muted">Total Won</p>
-          <p className="font-semibold text-primary">{totalWon}</p>
+          <p className="text-muted" id="won-label">Total Won</p>
+          <p className="font-semibold text-primary" aria-labelledby="won-label">{totalWon}</p>
         </div>
       </div>
     </motion.div>

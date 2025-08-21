@@ -1,4 +1,3 @@
-
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -14,8 +13,13 @@ import { spinSlotMachine, calculatePayout } from '../lib/slot-machine'
 import { createMockUser } from '../lib/auth'
 import { saveUser, getUser, updateUserBalance, saveBet, getBets } from '../lib/storage'
 import { User, Bet, SlotResult, GameState } from '../types'
+import { ToastType } from './Toast'
 
-export function SlotMachine() {
+interface SlotMachineProps {
+  showToast?: (message: string, type: ToastType) => void
+}
+
+export function SlotMachine({ showToast }: SlotMachineProps) {
   const [user, setUser] = useState<User | null>(null)
   const [gameState, setGameState] = useState<GameState>({
     isSpinning: false,
@@ -39,17 +43,41 @@ export function SlotMachine() {
   }, [])
 
   const handleWalletConnect = (address: string) => {
-    const newUser = createMockUser(address)
-    setUser(newUser)
-    saveUser(newUser)
-    setGameState(prev => ({
-      ...prev,
-      balance: newUser.balance,
-    }))
+    try {
+      const newUser = createMockUser(address)
+      setUser(newUser)
+      saveUser(newUser)
+      setGameState(prev => ({
+        ...prev,
+        balance: newUser.balance,
+      }))
+      
+      if (showToast) {
+        showToast(`Wallet connected successfully! Starting balance: ${newUser.balance} credits`, 'success')
+      }
+    } catch (error) {
+      if (showToast) {
+        showToast('Failed to connect wallet. Please try again.', 'error')
+      }
+    }
   }
 
   const handleSpin = async () => {
-    if (!user || gameState.isSpinning || gameState.currentBet > gameState.balance) {
+    if (!user) {
+      if (showToast) {
+        showToast('Please connect your wallet to play', 'info')
+      }
+      return
+    }
+    
+    if (gameState.isSpinning) {
+      return
+    }
+    
+    if (gameState.currentBet > gameState.balance) {
+      if (showToast) {
+        showToast('Insufficient balance for this bet amount', 'error')
+      }
       return
     }
 
@@ -88,6 +116,11 @@ export function SlotMachine() {
       const updatedUser = { ...user, balance: newBalance }
       setUser(updatedUser)
       saveUser(updatedUser)
+      
+      // Show toast for big wins
+      if (result.isWin && result.multiplier >= 15 && showToast) {
+        showToast(`🎉 BIG WIN! You won ${payout} credits with a ${result.multiplier}x multiplier!`, 'success')
+      }
     }, 2000)
   }
 
@@ -101,8 +134,10 @@ export function SlotMachine() {
         animate={{ opacity: 1, y: 0 }}
         className="text-center"
       >
-        <h1 className="display-text text-primary mb-2">🎰 Lucky Spin Casino</h1>
-        <p className="body-text text-muted">Spin to Win Real Crypto Rewards!</p>
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-primary mb-2">
+          <span aria-hidden="true">🎰</span> Lucky Spin Casino
+        </h1>
+        <p className="text-sm sm:text-base text-muted">Spin to Win Real Crypto Rewards!</p>
       </motion.div>
 
       {/* Wallet Connection */}
@@ -128,7 +163,7 @@ export function SlotMachine() {
             className="card space-y-6"
           >
             {/* Slot Reels */}
-            <div className="flex justify-center gap-4">
+            <div className="flex justify-center gap-2 sm:gap-4" aria-label="Slot Machine Reels">
               {gameState.lastResult ? (
                 gameState.lastResult.symbols.map((symbol, index) => (
                   <SlotReel
@@ -136,6 +171,7 @@ export function SlotMachine() {
                     symbol={symbol}
                     isSpinning={gameState.isSpinning}
                     delay={index * 200}
+                    index={index}
                   />
                 ))
               ) : (
@@ -146,6 +182,7 @@ export function SlotMachine() {
                     symbol={symbol}
                     isSpinning={gameState.isSpinning}
                     delay={index * 200}
+                    index={index}
                   />
                 ))
               )}
