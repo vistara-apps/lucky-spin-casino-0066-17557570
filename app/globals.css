@@ -1,0 +1,69 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --primary: 35 77% 61%;
+    --accent: 210 90% 50%;
+    --bg: 220 24% 14%;
+    --surface: 220 24% 18%;
+    --text: 0 0% 95%;
+    --muted: 0 0% 70%;
+  }
+  
+  body {
+    @apply bg-bg text-text;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary hover:bg-primary/90 text-black px-6 py-3 rounded-md font-bold transition-all duration-250 shadow-card hover:shadow-glow;
+  }
+  
+  .btn-secondary {
+    @apply bg-surface hover:bg-surface/80 text-text border border-primary/20 px-4 py-2 rounded-md transition-all duration-150;
+  }
+  
+  .card {
+    @apply bg-surface border border-primary/20 rounded-lg p-6 shadow-card;
+  }
+  
+  .input-field {
+    @apply bg-surface border border-primary/30 rounded-md px-3 py-2 text-text placeholder:text-muted focus:border-accent focus:outline-none transition-colors duration-150;
+  }
+  
+  .slot-reel {
+    @apply bg-surface border-2 border-primary/30 rounded-lg p-4 text-center font-bold text-2xl min-h-[80px] flex items-center justify-center;
+  }
+  
+  .slot-reel.spinning {
+    @apply animate-spin-reel;
+  }
+  
+  .win-display {
+    @apply text-primary font-bold text-xl animate-pulse;
+  }
+  
+  .loss-display {
+    @apply text-red-400 font-bold text-xl;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes spinReel {
+  0% { transform: rotateX(0deg); }
+  50% { transform: rotateX(180deg); }
+  100% { transform: rotateX(360deg); }
+}
